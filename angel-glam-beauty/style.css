@@ -77,3 +77,22 @@ input,select{display:block;width:100%;margin-top:.25rem;padding:.6rem .7rem;bord
 .aviso.on{transform:translate(-50%,0)}
 @media(max-width:760px){.hero{grid-template-columns:1fr;padding:3rem 5vw}.tonos{height:200px}nav{display:none}.top{justify-content:space-between}.cols{grid-template-columns:1fr}footer{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.top{background:#000;border-bottom:1px solid #2a2a2a;padding:.6rem 5vw}
+.logo img{display:block;width:56px;height:56px;border-radius:50%}
+.top nav a,.top .link{color:#e8e8e6}
+.top nav a:hover{color:#fff;text-decoration:underline}
+.carrito{background:#fff;color:#000}
+.carrito b{background:#000;color:#fff}
+.btn:hover{background:#3a3a3a}
+.hero{background:#000;color:#d9d9d6;padding:3.5rem 5vw}
+.hero h1{color:#fff;font-size:clamp(2.6rem,5.5vw,4.6rem)}
+.hero .btn{background:#fff;color:#000}
+.hero .btn:hover{background:#d4d4d1}
+.hero-logo{width:100%;max-width:460px;height:auto;justify-self:center}
+.filtros button.on{background:#000;border-color:#000}
+.natural{background:#1a1a1a}
+.natural p{color:#d9d9d6}
+footer{background:#000;align-items:start}
+.pie-logo{display:block;margin-bottom:.8rem;border-radius:50%}
+.top :focus-visible,.hero :focus-visible,footer :focus-visible{outline-color:#fff}
+@media(max-width:760px){.hero-logo{max-width:280px;order:-1}}
