@@ -1,1 +1,7 @@
-
+:root{--bayas:#111;--rosa:#ECECEA;--hoja:#6b6b6b;--tinta:#111;--blanco:#FAFAF8;--linea:#d4d4d1}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:Karla,sans-serif;color:var(--tinta);background:var(--blanco);line-height:1.6}
+h1,h2,h3,.logo{font-family:"Cormorant Garamond",serif;font-weight:600;line-height:1.1}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--hoja);outline-offset:2px}
