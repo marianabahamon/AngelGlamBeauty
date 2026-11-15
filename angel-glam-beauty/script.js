@@ -72,3 +72,39 @@ function abrirCajon(on){$("#cajon").classList.toggle("on",on);$("#velo").classLi
 $("#btnCarrito").onclick=()=>abrirCajon(true);
 $("#velo").onclick=()=>abrirCajon(false);
 $$("[data-cerrar]").forEach(b=>b.onclick=()=>{abrirCajon(false);b.closest("dialog")?.close()});
+/* Cuenta */
+function pintarCuenta(){
+  const dentro=!!sesion;
+  $("#btnLogin").hidden=dentro;$("#btnRegistro").hidden=dentro;$("#btnSalir").hidden=!dentro;
+  $("#saludo").textContent=dentro?"Hola, "+sesion.nombre.split(" ")[0]:"";
+  $("#btnAdmin").hidden=!(dentro&&sesion.admin);
+}
+function abrirAuth(tab){$(`.tabs [data-tab="${tab}"]`).click();$("#modalAuth").showModal()}
+$("#btnLogin").onclick=()=>abrirAuth("login");
+$("#btnRegistro").onclick=()=>abrirAuth("registro");
+$("#btnSalir").onclick=()=>{sesion=null;localStorage.removeItem("agb_sesion");pintarCuenta();aviso("Cerraste sesión")};
+$$(".tabs button").forEach(b=>b.onclick=()=>{
+  $$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  $("#formLogin").hidden=b.dataset.tab!=="login";
+  $("#formRegistro").hidden=b.dataset.tab!=="registro";
+});
+async function hash(t){
+  const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));
+  return [...new Uint8Array(buf)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+function iniciar(u){sesion={nombre:u.nombre,email:u.email,tel:u.tel,admin:u.email===ADMIN_EMAIL};localStorage.setItem("agb_sesion",JSON.stringify(sesion));pintarCuenta()}
+$("#formRegistro").onsubmit=async e=>{
+  e.preventDefault();const f=Object.fromEntries(new FormData(e.target));
+  f.email=f.email.toLowerCase();
+  if(usuarios.some(u=>u.email===f.email)){$("#errRegistro").textContent="Ese correo ya tiene una cuenta. Inicia sesión.";return}
+  const u={nombre:f.nombre,email:f.email,tel:f.tel,pass:await hash(f.pass)};
+  usuarios.push(u);localStorage.setItem("agb_usuarios",JSON.stringify(usuarios));
+  iniciar(u);e.target.reset();$("#errRegistro").textContent="";$("#modalAuth").close();aviso("Cuenta creada. ¡Bienvenida!");
+};
+$("#formLogin").onsubmit=async e=>{
+  e.preventDefault();const f=Object.fromEntries(new FormData(e.target));
+  const ph=await hash(f.pass);
+  const u=usuarios.find(x=>x.email===f.email.toLowerCase()&&x.pass===ph);
+  if(!u){$("#errLogin").textContent="Correo o contraseña incorrectos.";return}
+  iniciar(u);e.target.reset();$("#errLogin").textContent="";$("#modalAuth").close();aviso("Sesión iniciada");
+};
