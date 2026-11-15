@@ -72,7 +72,6 @@ function abrirCajon(on){$("#cajon").classList.toggle("on",on);$("#velo").classLi
 $("#btnCarrito").onclick=()=>abrirCajon(true);
 $("#velo").onclick=()=>abrirCajon(false);
 $$("[data-cerrar]").forEach(b=>b.onclick=()=>{abrirCajon(false);b.closest("dialog")?.close()});
-/* Cuenta */
 function pintarCuenta(){
   const dentro=!!sesion;
   $("#btnLogin").hidden=dentro;$("#btnRegistro").hidden=dentro;$("#btnSalir").hidden=!dentro;
@@ -108,3 +107,60 @@ $("#formLogin").onsubmit=async e=>{
   if(!u){$("#errLogin").textContent="Correo o contraseña incorrectos.";return}
   iniciar(u);e.target.reset();$("#errLogin").textContent="";$("#modalAuth").close();aviso("Sesión iniciada");
 };
+const NOTAS={tarjeta:"",pse:"Al confirmar te redirigiremos a tu banco para completar el pago.",nequi:"Te enviaremos una solicitud de pago a tu celular registrado en Nequi.",contra:"Pagas en efectivo al recibir. Se suma un recargo de $5.000."};
+function recargo(){return $("#metodo").value==="contra"?5000:0}
+function totalPago(){return subtotal()+ENVIO+recargo()}
+function actualizarMetodo(){
+  const m=$("#metodo").value;
+  $("#camposTarjeta").hidden=m!=="tarjeta";
+  $("#notaMetodo").textContent=NOTAS[m];
+  $("#totalPago").textContent=cop(totalPago());
+}
+$("#metodo").onchange=actualizarMetodo;
+$("#btnPagar").onclick=()=>{
+  if(!carrito.length){aviso("Agrega productos antes de pagar");return}
+  abrirCajon(false);
+  if(!sesion){abrirAuth("login");aviso("Inicia sesión o crea tu cuenta para pagar");return}
+  const f=$("#formPago");f.nombre.value=f.nombre.value||sesion.nombre;f.email.value=f.email.value||sesion.email;f.tel.value=f.tel.value||sesion.tel;
+  actualizarMetodo();$("#modalPago").showModal();
+};
+$("#formPago").onsubmit=e=>{
+  e.preventDefault();const f=e.target,err=$("#errPago");err.textContent="";
+  if(f.metodo.value==="tarjeta"){
+    const num=f.num.value.replace(/\s/g,"");
+    if(!/^\d{13,19}$/.test(num)){err.textContent="Revisa el número de tarjeta.";return}
+    if(!f.titular.value.trim()){err.textContent="Escribe el nombre que aparece en la tarjeta.";return}
+    const m=f.vence.value.match(/^(\d{2})\/(\d{2})$/);
+    if(!m||+m[1]<1||+m[1]>12){err.textContent="La fecha debe tener el formato MM/AA.";return}
+    if(!/^\d{3,4}$/.test(f.cvv.value)){err.textContent="El CVV debe tener 3 o 4 números.";return}
+  }
+  const pedido="AGB-"+Date.now().toString().slice(-6);
+  const pedidos=leer("agb_pedidos",[]);
+  pedidos.push({pedido,email:f.email.value,total:totalPago(),metodo:f.metodo.value,items:carrito,fecha:new Date().toISOString()});
+  localStorage.setItem("agb_pedidos",JSON.stringify(pedidos));
+  $("#textoOk").textContent=`Tu pedido ${pedido} por ${cop(totalPago())} quedó registrado. Enviaremos la confirmación a ${f.email.value} y lo despacharemos a ${f.dir.value}, ${f.ciudad.value}.`;
+  carrito=[];guardarCarrito();f.reset();
+  $("#modalPago").close();$("#modalOk").showModal();
+};
+function refrescar(){
+  PRODUCTOS=[...BASE,...extra];
+  carrito=carrito.filter(i=>PRODUCTOS.some(p=>p.id===i.id));
+  pintarFiltros();pintarProductos();guardarCarrito();
+  $("#listaAdmin").innerHTML=extra.length?extra.map(p=>`<div class="item"><div><b>${esc(p.n)}</b><br>${esc(p.c)}, ${cop(p.p)}</div><button class="quitar" data-del="${p.id}">Eliminar</button></div>`).join(""):'<p class="vacio">Aún no has agregado productos propios.</p>';
+}
+function reducir(file){return new Promise(ok=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);ok(c.toDataURL("image/jpeg",.8))};im.src=r.result};r.readAsDataURL(file)})}
+$("#btnAdmin").onclick=()=>$("#modalAdmin").showModal();
+$("#formAdmin").onsubmit=async e=>{
+  e.preventDefault();const f=e.target;
+  const p={id:Date.now(),n:f.nombre.value.trim(),c:f.cat.value.trim(),p:+f.precio.value,d:f.desc.value.trim(),k:f.color.value};
+  if(f.foto.files[0])p.img=await reducir(f.foto.files[0]);
+  extra.push(p);
+  try{localStorage.setItem("agb_extra",JSON.stringify(extra))}catch{extra.pop();$("#errAdmin").textContent="No hay espacio para guardar esa foto. Usa una más pequeña.";return}
+  f.reset();$("#errAdmin").textContent="";refrescar();aviso("Producto agregado al catálogo");
+};
+$("#listaAdmin").addEventListener("click",e=>{
+  const id=+e.target.dataset.del;if(!id)return;
+  extra=extra.filter(p=>p.id!==id);localStorage.setItem("agb_extra",JSON.stringify(extra));refrescar();aviso("Producto eliminado");
+});
+
+refrescar();pintarCarrito();pintarCuenta();
