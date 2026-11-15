@@ -27,3 +27,21 @@ button{font:inherit;cursor:pointer}
 .btn{display:inline-block;background:var(--bayas);color:#fff;border:0;padding:.8rem 1.6rem;border-radius:6px;text-decoration:none;font-weight:700}
 .btn:hover{background:#5d1c32}
 .full{width:100%;margin-top:1rem}
+.seccion{padding:4.5rem 5vw}
+.seccion h2{font-size:2.2rem;margin-bottom:1.5rem;color:var(--bayas)}
+.filtros{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2rem}
+.filtros button{background:none;border:1px solid var(--linea);padding:.4rem 1.1rem;border-radius:99px}
+.filtros button.on{background:var(--tinta);color:#fff;border-color:var(--tinta)}
+.grilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2rem 1.5rem}
+.prod .foto{aspect-ratio:1;border-radius:6px;background:var(--rosa);display:grid;place-items:center;margin-bottom:.8rem}
+.prod .foto i{width:34%;height:62%;background:var(--c);border-radius:40px 40px 6px 6px;box-shadow:inset -8px 0 0 rgba(0,0,0,.1)}
+.prod h3{font-size:1.15rem}
+.prod p{font-size:.92rem;color:#666}
+.prod .fila{display:flex;justify-content:space-between;align-items:center;margin-top:.5rem}
+.prod .fila button{background:none;border:1.5px solid var(--bayas);color:var(--bayas);border-radius:6px;padding:.3rem .8rem;font-weight:700}
+.prod .fila button:hover{background:var(--bayas);color:#fff}
+.natural{background:var(--hoja);color:#fff}
+.natural h2{color:#fff}
+.tres{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2.5rem;max-width:1000px}
+footer{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;padding:3rem 5vw;background:var(--tinta);color:#e9d9dc}
+footer small{grid-column:1/-1;opacity:.7}
