@@ -43,3 +43,32 @@ function pintarProductos(){
 $("#buscar").addEventListener("input",pintarProductos);
 $("#filtros").addEventListener("click",e=>{if(e.target.dataset.f){filtro=e.target.dataset.f;pintarFiltros();pintarProductos()}});
 $("#grilla").addEventListener("click",e=>{if(e.target.dataset.add){agregar(+e.target.dataset.add)}});
+function subtotal(){return carrito.reduce((s,i)=>s+PRODUCTOS.find(p=>p.id===i.id).p*i.q,0)}
+function guardarCarrito(){localStorage.setItem("agb_carrito",JSON.stringify(carrito));pintarCarrito()}
+function agregar(id){
+  const it=carrito.find(i=>i.id===id);
+  it?it.q++:carrito.push({id,q:1});
+  guardarCarrito();aviso("Producto agregado al carrito");
+}
+function pintarCarrito(){
+  $("#cuenta").textContent=carrito.reduce((s,i)=>s+i.q,0);
+  $("#total").textContent=cop(subtotal());
+  $("#items").innerHTML=carrito.length?carrito.map(i=>{
+    const p=PRODUCTOS.find(x=>x.id===i.id);
+    return `<div class="item"><div><b>${esc(p.n)}</b><br>${cop(p.p)}</div><b>${cop(p.p*i.q)}</b>
+    <div class="cant"><button data-m="${i.id}">−</button>${i.q}<button data-s="${i.id}">+</button></div>
+    <button class="quitar" data-q="${i.id}">Quitar</button></div>`}).join(""):'<p class="vacio">Tu carrito está vacío. Agrega algo del catálogo.</p>';
+}
+$("#items").addEventListener("click",e=>{
+  const d=e.target.dataset;const id=+(d.m||d.s||d.q);if(!id)return;
+  const it=carrito.find(i=>i.id===id);
+  if(d.s)it.q++;
+  if(d.m)it.q--;
+  if(d.q||it.q<1)carrito=carrito.filter(i=>i.id!==id);
+  guardarCarrito();
+});
+
+function abrirCajon(on){$("#cajon").classList.toggle("on",on);$("#velo").classList.toggle("on",on)}
+$("#btnCarrito").onclick=()=>abrirCajon(true);
+$("#velo").onclick=()=>abrirCajon(false);
+$$("[data-cerrar]").forEach(b=>b.onclick=()=>{abrirCajon(false);b.closest("dialog")?.close()});
