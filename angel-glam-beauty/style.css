@@ -5,3 +5,14 @@ body{font-family:Karla,sans-serif;color:var(--tinta);background:var(--blanco);li
 h1,h2,h3,.logo{font-family:"Cormorant Garamond",serif;font-weight:600;line-height:1.1}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--hoja);outline-offset:2px}
+.top{display:flex;align-items:center;gap:2rem;padding:1rem 5vw;position:sticky;top:0;background:var(--blanco);border-bottom:1px solid var(--linea);z-index:5}
+.logo{font-size:1.5rem;text-decoration:none;color:var(--bayas)}
+.logo span{color:var(--hoja)}
+nav{display:flex;gap:1.5rem;margin-left:auto}
+nav a{text-decoration:none}
+nav a:hover{color:var(--bayas)}
+.acciones{display:flex;gap:1rem;align-items:center}
+button{font:inherit;cursor:pointer}
+.link{background:none;border:0;text-decoration:underline;color:var(--tinta)}
+.carrito{background:var(--tinta);color:#fff;border:0;padding:.5rem 1rem;border-radius:99px}
+.carrito b{background:var(--rosa);color:var(--bayas);border-radius:99px;padding:0 .5rem;margin-left:.3rem}
