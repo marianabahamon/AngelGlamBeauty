@@ -76,3 +76,87 @@
     <button class="btn full" id="btnPagar">Ir a pagar</button>
   </div>
 </aside>
+dialog id="modalAuth">
+  <button class="x" data-cerrar>×</button>
+  <div class="tabs"><button data-tab="login" class="on">Iniciar sesión</button><button data-tab="registro">Crear cuenta</button></div>
+  <form id="formLogin">
+    <label>Correo<input type="email" name="email" required></label>
+    <label>Contraseña<input type="password" name="pass" required minlength="6"></label>
+    <p class="err" id="errLogin"></p>
+    <button class="btn full">Entrar</button>
+  </form>
+  <form id="formRegistro" hidden>
+    <label>Nombre completo<input name="nombre" required></label>
+    <label>Correo<input type="email" name="email" required></label>
+    <label>Celular<input type="tel" name="tel" required pattern="[0-9 +]{7,15}"></label>
+    <label>Contraseña (mínimo 6 caracteres)<input type="password" name="pass" required minlength="6"></label>
+    <p class="err" id="errRegistro"></p>
+    <button class="btn full">Crear mi cuenta</button>
+  </form>
+</dialog>
+
+<dialog id="modalPago" class="ancho">
+  <button class="x" data-cerrar>×</button>
+  <form id="formPago">
+    <h3>Datos de envío y pago</h3>
+    <div class="cols">
+      <label>Nombre completo<input name="nombre" required></label>
+      <label>Cédula<input name="cedula" required inputmode="numeric" pattern="[0-9]{5,12}"></label>
+      <label>Correo<input type="email" name="email" required></label>
+      <label>Celular<input type="tel" name="tel" required pattern="[0-9 +]{7,15}"></label>
+      <label class="dos">Dirección de entrega<input name="dir" required placeholder="Calle, número, barrio, apto"></label>
+      <label>Ciudad<input name="ciudad" required></label>
+      <label>Departamento<input name="depto" required></label>
+    </div>
+    <label>Método de pago
+      <select name="metodo" id="metodo">
+        <option value="tarjeta">Tarjeta crédito o débito</option>
+        <option value="pse">PSE</option>
+        <option value="nequi">Nequi</option>
+        <option value="contra">Pago contra entrega</option>
+      </select>
+    </label>
+    <div id="camposTarjeta" class="cols">
+      <label class="dos">Número de tarjeta<input name="num" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000"></label>
+      <label class="dos">Nombre en la tarjeta<input name="titular"></label>
+      <label>Vence (MM/AA)<input name="vence" maxlength="5" placeholder="08/29"></label>
+      <label>CVV<input name="cvv" inputmode="numeric" maxlength="4" type="password"></label>
+    </div>
+    <p class="nota" id="notaMetodo"></p>
+    <p class="err" id="errPago"></p>
+    <div class="total"><span>Total a pagar (envío incluido)</span><b id="totalPago">$0</b></div>
+    <button class="btn full">Confirmar pedido</button>
+  </form>
+</dialog>
+
+<dialog id="modalAdmin" class="ancho">
+  <button class="x" data-cerrar>×</button>
+  <h3>Administrar productos</h3>
+  <form id="formAdmin">
+    <div class="cols">
+      <label>Nombre<input name="nombre" required></label>
+      <label>Categoría<input name="cat" list="cats" required placeholder="Ej: Labios"></label>
+      <label>Precio (COP)<input name="precio" type="number" min="1000" step="500" required></label>
+      <label>Color del producto<input name="color" type="color" value="#7a2742"></label>
+      <label class="dos">Descripción corta<input name="desc" required maxlength="90"></label>
+      <label class="dos">Foto (opcional)<input name="foto" type="file" accept="image/*"></label>
+    </div>
+    <p class="err" id="errAdmin"></p>
+    <button class="btn full">Agregar al catálogo</button>
+  </form>
+  <h3 class="sub">Productos que has agregado</h3>
+  <div id="listaAdmin"></div>
+  <datalist id="cats"></datalist>
+</dialog>
+
+<dialog id="modalOk">
+  <button class="x" data-cerrar>×</button>
+  <h3>¡Gracias por tu compra!</h3>
+  <p id="textoOk"></p>
+  <button class="btn full" data-cerrar>Seguir comprando</button>
+</dialog>
+
+<div class="aviso" id="aviso" role="status"></div>
+<script src="script.js"></script>
+</body>
+</html>
