@@ -16,3 +16,14 @@ button{font:inherit;cursor:pointer}
 .link{background:none;border:0;text-decoration:underline;color:var(--tinta)}
 .carrito{background:var(--tinta);color:#fff;border:0;padding:.5rem 1rem;border-radius:99px}
 .carrito b{background:var(--rosa);color:var(--bayas);border-radius:99px;padding:0 .5rem;margin-left:.3rem}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:3rem;align-items:center;padding:5rem 5vw;background:var(--rosa)}
+.hero h1{font-size:clamp(2.2rem,5vw,4rem);color:var(--bayas);margin-bottom:1.2rem}
+.hero p{max-width:46ch;margin-bottom:2rem;font-size:1.1rem}
+.tonos{display:flex;gap:.6rem;height:340px;align-items:flex-end}
+.tonos i{flex:1;background:var(--c);border-radius:60px 60px 8px 8px;transform-origin:bottom;animation:sube .9s cubic-bezier(.2,.8,.2,1) backwards}
+.tonos i:nth-child(1){height:70%}.tonos i:nth-child(2){height:88%;animation-delay:.08s}.tonos i:nth-child(3){height:100%;animation-delay:.16s}
+.tonos i:nth-child(4){height:82%;animation-delay:.24s}.tonos i:nth-child(5){height:64%;animation-delay:.32s}.tonos i:nth-child(6){height:76%;animation-delay:.4s}
+@keyframes sube{from{transform:scaleY(0)}}
+.btn{display:inline-block;background:var(--bayas);color:#fff;border:0;padding:.8rem 1.6rem;border-radius:6px;text-decoration:none;font-weight:700}
+.btn:hover{background:#5d1c32}
+.full{width:100%;margin-top:1rem}
